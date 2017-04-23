@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
@@ -13,13 +8,15 @@ date: The date on which the measurement was taken in YYYY-MM-DD format
 interval: Identifier for the 5-minute interval in which measurement was taken
 
 The Code for reading in the dataset and/or processing the data is 
-```{r}
+
+```r
 D <- read.csv("activity.csv")
 ```
 
 ## What is mean total number of steps taken per day?
 Histogram of the total number of steps taken each day is made here:
-```{r}
+
+```r
 totalSteps <- aggregate(D$steps~D$date, FUN=sum)
 mean_stepsperday_withmissing <- mean(totalSteps$`D$steps`)
 median_stepsperday_withmissing <- median(totalSteps$`D$steps`)
@@ -30,12 +27,15 @@ hist(totalSteps$`D$steps`,
      main = "Histogram of the total number of steps taken each day")
 ```
 
-The mean number of steps taken each day is `r mean_stepsperday_withmissing ` and 
-the median number of steps taken each day is `r median_stepsperday_withmissing `.
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+The mean number of steps taken each day is 1.0766189\times 10^{4} and 
+the median number of steps taken each day is 10765.
 
 ## What is the average daily activity pattern?
 Time series plot of the average number of steps taken is as following:
-```{r}
+
+```r
 plot(totalSteps$`D$date`,totalSteps$`D$steps`,
     main = "average daily activity pattern",
      xlab = 'days',
@@ -43,18 +43,18 @@ plot(totalSteps$`D$date`,totalSteps$`D$steps`,
 lines(totalSteps$`D$date`,totalSteps$`D$steps`,type = "l")
 ```
 
-```{r, echo = FALSE}
-stepsInterval <- aggregate(D$steps~as.factor(D$interval), FUN=mean)
-max5min <- stepsInterval$`as.factor(D$interval)`[stepsInterval$`D$steps` == max(stepsInterval$`D$steps`)]
-```
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-The 5-minute interval that, on average, contains the maximum number of steps is `r max5min`.
+
+
+The 5-minute interval that, on average, contains the maximum number of steps is 835.
 
 ## Imputing missing values
 Code to describe and show a strategy for imputing missing data
 The missing data is removed from the aggregated data set using "na.rm=TRUE".
 Histogram of the total number of steps taken each day after missing values are imputed.
-```{r}
+
+```r
 total_missing_data <- table(is.na(D$steps))[[2]]
 totalSteps <- aggregate(D$steps~D$date, FUN=sum, na.rm=TRUE)
 
@@ -70,8 +70,10 @@ hist(totalSteps$`D$steps`,
      main = "Histogram of the total number of steps taken each day")
 ```
 
-The total number of missing values in the dataset is `r total_missing_data` enteries. After removing those, the mean number of steps taken each day is `r mean_stepsperday_withoutmissing ` and the median number of steps taken each day is `r median_stepsperday_withoutmissing `.
-The difference in mean is `r mean_stepsperday_withmissing - mean_stepsperday_withoutmissing`, and in the median is `r median_stepsperday_withmissing - median_stepsperday_withoutmissing`. I guess by using mean, median, or sum, we already removed the missing data from the data set. Therefore, no change was made after explicitely removing the missing ones.
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+The total number of missing values in the dataset is 2304 enteries. After removing those, the mean number of steps taken each day is 1.0766189\times 10^{4} and the median number of steps taken each day is 10765.
+The difference in mean is 0, and in the median is 0. I guess by using mean, median, or sum, we already removed the missing data from the data set. Therefore, no change was made after explicitely removing the missing ones.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -79,7 +81,8 @@ For the panel plot comparing the average number of steps taken per 5-minute inte
 
 We see more steps during early intervals of weekdays than weekends, and more steps during late intervals of weekends than weekdays.
 
-```{r}
+
+```r
 D$weekday <- weekdays(as.Date(D$date,"%Y-%m-%d"))
 D$weekend <- (D$weekday == "Sunday" | D$weekday == "Saturday" )
 
@@ -127,5 +130,7 @@ lines(weekends_agg$`as.factor(weekends$interval)`,
       diff_agg,
       type = "l")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
